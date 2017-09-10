@@ -47,7 +47,6 @@ class HascheckListener(sublime_plugin.ViewEventListener):
 class HascheckReplaceText(sublime_plugin.TextCommand):
 	def run(self, edit, begin, end, text):
 		self.view.replace(edit, sublime.Region(begin, end), text)
-		self.view.run_command("hascheck_remove_region", {"begin": begin, "end": end})
 		return
 
 class HascheckRemoveRegion(sublime_plugin.TextCommand):

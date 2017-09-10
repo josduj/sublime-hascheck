@@ -98,15 +98,19 @@ class HascheckCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		suggestions = {}
 		text = self.view.substr(sublime.Region(0, self.view.size()))
-		data = bytes(urllib.parse.urlencode({ "textarea" : text }).encode())
-		with urllib.request.urlopen("https://ispravi.me/api/ispravi.pl", data) as url:
-			res = json.loads(url.read().decode())["response"]
-			if res:
-				self.highlight_errors(res["error"])
-				self.view.set_status("hascheck", "{0} errors".format(res["errors"]))
-			else:
-				self.view.set_status("hascheck", "No errors")
-		return
+
+		def fetch_async():
+			data = bytes(urllib.parse.urlencode({ "textarea" : text }).encode())
+			with urllib.request.urlopen("https://ispravi.me/api/ispravi.pl", data) as url:
+				res = json.loads(url.read().decode())["response"]
+				if res:
+					self.highlight_errors(res["error"])
+					self.view.set_status("hascheck", "{0} errors".format(res["errors"]))
+				else:
+					self.view.set_status("hascheck", "No errors")
+			return
+
+		sublime.set_timeout_async(fetch_async, 0)
 
 def get_flags(highlight, underline):
 	if highlight == "underline":

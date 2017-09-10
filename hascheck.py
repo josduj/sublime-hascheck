@@ -56,7 +56,7 @@ class HascheckRemoveRegion(sublime_plugin.TextCommand):
 	def run(self, edit, begin, end):
 		regions = self.view.get_regions("hascheck_errors")
 		regions.remove(sublime.Region(begin, end))
-		self.view.add_regions("hascheck_errors", regions, "invalid", "dot", flags)
+		self.view.add_regions("hascheck_errors", regions, SCOPE, ICON, FLAGS)
 		return
 
 class HascheckCommand(sublime_plugin.TextCommand):
@@ -67,7 +67,7 @@ class HascheckCommand(sublime_plugin.TextCommand):
 			for p in e["position"]:
 				regions.append(sublime.Region(p, p + length))
 			suggestions[e["suspicious"]] = e["suggestions"]
-		self.view.add_regions("hascheck_errors", regions, "invalid", "dot", flags)
+		self.view.add_regions("hascheck_errors", regions, SCOPE, ICON, FLAGS)
 
 	def run(self, edit):
 		suggestions = {}
@@ -82,9 +82,28 @@ class HascheckCommand(sublime_plugin.TextCommand):
 				self.view.set_status("hascheck", "No errors")
 		return
 
-global suggestions
-global flags
-global icon
+def get_flags(highlight, underline):
+	print(highlight, underline)
+	if highlight == "underline":
+		clean = sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE
+		if underline == "solid":
+			return clean | sublime.DRAW_SOLID_UNDERLINE
+		elif underline == "stippled":
+			return clean | sublime.DRAW_STIPPLED_UNDERLINE
+		else:
+			return clean | sublime.DRAW_SQUIGGLY_UNDERLINE
+	elif highlight == "outline":
+		return sublime.DRAW_NO_FILL
+	else:
+		return 0
 
-suggestions = {}
-flags = sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE | sublime.DRAW_SQUIGGLY_UNDERLINE
+def plugin_loaded():
+	global FLAGS, ICON, SCOPE
+	global suggestions
+	
+	suggestions = {}
+	settings = sublime.load_settings("Hascheck.sublime-settings")
+
+	FLAGS = get_flags(settings.get("highlight_style"), settings.get("underline_style"))
+	ICON = settings.get("icon_style")
+	SCOPE = "invalid"

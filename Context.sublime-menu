@@ -1,3 +1,6 @@
 [
-	{ "command": "hascheck" }
+	{
+		"caption": "Hascheck",
+		"command": "hascheck"
+	}
 ]

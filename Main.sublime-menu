@@ -1,0 +1,40 @@
+[
+	{
+		"id": "view",
+		"children": [
+			{
+				"id": "hascheck",
+				"caption": "-"
+			},
+			{
+				"caption": "Hascheck",
+				"mnemonic": "c",
+				"command": "hascheck"
+			}
+		]
+	},
+	{
+		"id": "preferences",
+		"children": [
+			{
+				"caption": "Package Settings",
+				"id": "package-settings",
+				"children": [
+					{
+						"caption": "Hascheck",
+						"children": [
+							{
+								"caption": "Settings",
+								"command": "edit_settings",
+								"args": {
+								  "base_file": "${packages}/Hascheck/Hascheck.sublime-settings",
+								  "default": "// Settings in here override those in \"Hascheck/Hascheck.sublime-settings\"\n\n{\n\t$0\n}\n"
+								}
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+]

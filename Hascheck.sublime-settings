@@ -1,0 +1,11 @@
+{
+	// (fill|outline|underline)
+	"highlight_style": "underline",
+
+	// (solid|stippled|squiggly)
+	"underline_style": "squiggly",
+	
+	// (dot|circle|bookmark|cross)
+	// leave empty for no icon
+	"icon_style": "dot"
+}

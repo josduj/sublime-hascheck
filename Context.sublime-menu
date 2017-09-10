@@ -1,6 +1,22 @@
 [
 	{
 		"caption": "Hascheck",
-		"command": "hascheck"
+		"children": [
+			{
+				"caption": "Check Spelling",
+				"command": "hascheck",
+			},
+			{
+				"caption": "-"
+			},
+			{
+				"caption": "Previous Error",
+				"command": "hascheck_prev_error"
+			},
+			{
+				"caption": "Next Error",
+				"command": "hascheck_next_error"
+			}
+		]
 	}
 ]

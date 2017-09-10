@@ -1,6 +1,14 @@
 [
 	{
-		"caption": "Hascheck: Check spelling",
+		"caption": "Hascheck: Check Spelling",
 		"command": "hascheck"
+	},
+	{
+		"caption": "Hascheck: Next error",
+		"command": "hascheck_next_error"
+	},
+	{
+		"caption": "Hascheck: Previous error",
+		"command": "hascheck_prev_error"
 	}
 ]

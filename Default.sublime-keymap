@@ -1,3 +1,5 @@
 [
-	{ "keys": ["f1"], "command": "hascheck" }
+	{ "keys": ["f1"], "command": "hascheck" },
+	{ "keys": ["shift+f1"], "command": "hascheck_next_error" },
+	{ "keys": ["ctrl+shift+f1"], "command": "hascheck_prev_error" }
 ]

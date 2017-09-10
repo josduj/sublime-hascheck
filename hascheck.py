@@ -44,13 +44,11 @@ class HascheckListener(sublime_plugin.ViewEventListener):
 			if self.view.substr(r) not in suggestions.keys():
 				self.view.run_command("hascheck_remove_region", {"begin": r.a, "end": r.b})
 
-
 class HascheckReplaceText(sublime_plugin.TextCommand):
 	def run(self, edit, begin, end, text):
 		self.view.replace(edit, sublime.Region(begin, end), text)
 		self.view.run_command("hascheck_remove_region", {"begin": begin, "end": end})
 		return
-
 
 class HascheckRemoveRegion(sublime_plugin.TextCommand):
 	def run(self, edit, begin, end):
@@ -58,6 +56,34 @@ class HascheckRemoveRegion(sublime_plugin.TextCommand):
 		regions.remove(sublime.Region(begin, end))
 		self.view.add_regions("hascheck_errors", regions, SCOPE, ICON, FLAGS)
 		return
+
+class HascheckNextErrorCommand(sublime_plugin.TextCommand):
+	def is_enabled(self):
+		regions = self.view.get_regions("hascheck_errors")
+		return len(regions) > 0 and self.view.sel()[0].end() < regions[-1].a
+
+	def run(self, edit):
+		regions = self.view.get_regions("hascheck_errors")
+		for reg in regions:
+			if self.view.sel()[0].end() < reg.a:
+				sublime.Selection.clear(self.view)
+				sublime.Selection.add(self.view, reg)
+				self.view.show_at_center(reg)
+				return
+
+class HascheckPrevErrorCommand(sublime_plugin.TextCommand):
+	def is_enabled(self):
+		regions = self.view.get_regions("hascheck_errors")
+		return len(regions) > 0 and self.view.sel()[0].end() > regions[0].b
+
+	def run(self, edit):
+		regions = self.view.get_regions("hascheck_errors")
+		for reg in reversed(regions):
+			if self.view.sel()[0].end() > reg.b:
+				sublime.Selection.clear(self.view)
+				sublime.Selection.add(self.view, reg)
+				self.view.show_at_center(reg)
+				return
 
 class HascheckCommand(sublime_plugin.TextCommand):
 	def highlight_errors(self, errors):
@@ -83,7 +109,6 @@ class HascheckCommand(sublime_plugin.TextCommand):
 		return
 
 def get_flags(highlight, underline):
-	print(highlight, underline)
 	if highlight == "underline":
 		clean = sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE
 		if underline == "solid":
